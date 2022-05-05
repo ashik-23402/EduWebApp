@@ -1,44 +1,60 @@
 package com.learnweb.learnweb.ServiceImple;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
+import com.learnweb.learnweb.Dao.CourseRepo;
 import com.learnweb.learnweb.Entity.Courses;
 import com.learnweb.learnweb.Services.CourseService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    List<Courses>Allcourses;
+    // List<Courses>Allcourses;
 
-    CourseServiceImpl(){
-        Allcourses = new ArrayList<>();
-        Allcourses.add(new Courses(12,"java","Lubna","Master Of java"));
-        Allcourses.add(new Courses(15,"Python","Rimi","This is snake"));
-        Allcourses.add(new Courses(18,"Bangla","Nabila","literature"));
-    }
+    @Autowired
+    private CourseRepo courseRepo;
+
+    // CourseServiceImpl(){
+    //     // Allcourses = new ArrayList<>();
+    //     // Allcourses.add(new Courses(12,"java","Lubna","Master Of java"));
+    //     // Allcourses.add(new Courses(15,"Python","Rimi","This is snake"));
+    //     // Allcourses.add(new Courses(18,"Bangla","Nabila","literature"));
+    // }
 
     @Override
     public List<Courses> GetAllCourses() {
        
-        
-        return Allcourses;
+        List<Courses>allcourse = (List<Courses>) this.courseRepo.findAll();
+
+        return allcourse;
     }
 
     @Override
     public Courses SingleCourse(int id) {
-        for(Courses course : Allcourses){
-            if(course.getId() == id) return course;
+        Courses c = null;
+        try{
+            c = this.courseRepo.findById(id);
         }
-        return null;
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return c;
     }
 
     @Override
-    public void AddCourse(Courses course) {
-        // TODO Auto-generated method stub
-        Allcourses.add(course);
+    public boolean AddCourse(Courses course) {
+        
+        Courses c = this.courseRepo.save(course);
+
+        if(c == null){
+            return false;
+        }
+        return true;
+       
         
     }
 
