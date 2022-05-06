@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "Courses")
 public class Courses {
@@ -19,6 +21,7 @@ public class Courses {
     private String course_details;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Author course_author;
 
     Courses(){
